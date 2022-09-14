@@ -1,16 +1,24 @@
 import React,{useEffect, useState} from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
-import tw from 'twin.macro'
+import { useNavigate } from 'react-router-dom'
 
-
+import { Api } from '../utils/api'
  
 import {colors} from "../assets/colors"
 
 const Signin = () => {
+  const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const handleSubmit=()=>{
+      Api.post('/user/login-user',{email,password}).then((res)=>{
+        console.log(res.data)
+        localStorage.setItem("user",JSON.stringify(res.data))
+        navigate('/dashboard')
+      }).catch((err)=>{
+        alert(err.response.data)
+        console.log(err)
+      })
 
 }
   return (

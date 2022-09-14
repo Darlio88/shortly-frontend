@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react'
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
-import tw from 'twin.macro'
+import { Link, useNavigate } from 'react-router-dom'
+ 
+import {Api} from '../utils/api'
 
 
  
@@ -12,8 +12,18 @@ const Signin = () => {
     const [lastName, setLastName] = useState('')
     const [firstName, setFirstName] = useState('')
     const [password, setPassword] = useState('')
-    const handleSubmit=()=>{
+    const navigation = useNavigate()
 
+
+    const handleSubmit=()=>{ 
+   Api.post('/user/create-user', {firstName,lastName,email,password}).then((res)=>{
+      console.log(res.data)
+      localStorage.setItem("user",JSON.stringify(res.data))
+      navigation('/dashboard')
+   }).catch((err)=>{
+      console.log(err)
+      alert(err.response.data)
+   })
 }
   return (
     <div style={{height:"100vh", width:"100vw"}} className='flex flex-col items-center justify-center'>

@@ -3,12 +3,13 @@ import axios from 'axios'
 
 import styled from "styled-components"
 import tw from 'twin.macro'
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 
 import { FiLink, FiAlignCenter} from "react-icons/fi";
 
 import {colors} from '../assets/colors'
 import blob from '../assets/blob-main.png'
+import { Api } from "../utils/api";
 
 
 const WelcomeContainer = styled.div`
@@ -215,23 +216,24 @@ pb-2
 `}
 `
 function Welcome() {
-  const baseUrl = process.env.REACT_APP_BASE_URI
-const [longUrl, setLongUrl] = useState('')
+  const User = localStorage.user
+   const user = User?JSON.parse(User):null;
+   console.log(user)
+    const navigate = useNavigate()
+    const [longUrl, setLongUrl] = useState('')
+    const [short, setShort] = useState('')
 
-const [short, setShort] = useState('')
-
-const handleSubmit = () =>{
-  console.log(process.env.REACT_APP_BASE_URI)
-console.log(longUrl)
-axios.post(baseUrl,{url:longUrl}).then(
-(response)=>{
-  console.log(response)
-  setShort(response.data.shortUrl)
-}
-).catch((err)=>{console.log(err)})
+    const handleSubmit = () =>{
+          console.log(longUrl)
+          Api.post('/api/create-short-url',{url:longUrl,createdBy:user?._id}).then(
+          (response)=>{
+            console.log(response)
+            setShort(response.data.shortUrl)
+          }
+          ).catch((err)=>{console.log(err)})
 
 
-}
+      }
   return (
     <WelcomeContainer>
     <HeaderContainer>
@@ -240,14 +242,21 @@ axios.post(baseUrl,{url:longUrl}).then(
       <HeaderTitle>Shortly</HeaderTitle>
       </HeaderRight>
       <HeaderLeft>
-        <HeaderLinks>Features</HeaderLinks>
+        <Link to={user?'/dashboard':'/signin'}>
+        <HeaderLinks>Dashboard</HeaderLinks>
+        </Link>
+        {(!user) && 
+        (
         <Link to='/signin'  >
         <HeaderLinks>Signin</HeaderLinks>
-        </Link>
+        </Link>)}
+        {(!user) &&
         <Link to='/signup' >
         <HeaderLinks>Signup</HeaderLinks>
-        </Link>
-        <Button>Get started</Button>
+        </Link>}
+        {(!user) &&
+        <Button onClick={()=>navigate('/signin')}>Get started</Button>
+}
       </HeaderLeft>
       <Toggler>
       <FiAlignCenter size={24} color='#31093E'/>
@@ -262,17 +271,14 @@ axios.post(baseUrl,{url:longUrl}).then(
   A simple but <br></br>powerful tool for Business
   </ContentHeader>
   <ContentBody>
-  Lorem Ipsum has been the industry's<br></br>
-   standard 
-  dummy text ever since the 1500s,<br></br> 
-  when an unknown printer took a galley of type 
+  On top of better deliverability<br></br>
+  and click-through rich link-level data <br></br> 
+  gives you crucial insight into your link 
   <br></br>
-  and scrambled it to make a type specimen book. 
+  engagement so your team can make smarter
   <br></br>
-  It has survived not only five centuries,
+  decisions around its content and communications.
   <br></br>
-   but also the leap into electronic typesetting, 
-   remaining essentially unchanged. 
   </ContentBody>
   <InputContainer>
 <InputHolder >
@@ -289,7 +295,7 @@ axios.post(baseUrl,{url:longUrl}).then(
   {short && (<ResponseText>
     {short}
   </ResponseText>)}
-  <Button>Get Started</Button>
+  <Button onClick={()=>navigate('/signin')}>Get Started</Button>
   </ContentLeft>
 <ContentRight>
 <Image  src={blob} alt='blob' />
