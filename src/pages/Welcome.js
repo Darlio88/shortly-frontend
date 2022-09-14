@@ -295,7 +295,7 @@ function Welcome() {
   {short && (<ResponseText>
     {short}
   </ResponseText>)}
-  <Button onClick={()=>navigate('/signin')}>Get Started</Button>
+  <Button onClick={()=>navigate(user?'/dashboard':'/signin')}>{user?'Go To Dashboard':'Get Started'}</Button>
   </ContentLeft>
 <ContentRight>
 <Image  src={blob} alt='blob' />
