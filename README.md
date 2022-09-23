@@ -1,6 +1,8 @@
 ## URL SHORTENER REACT APP
 this is an url shortener react built using reactjs on the frontend and node.js, express mongodb for shortener 
 
+## LIVE PREVIEW 
+[click on the link](https://shortly-frontend-8j84.vercel.app/)
 
 ## SCREENSHOTS
 <img src='https://ik.imagekit.io/x761p7oyp/shortly/Screenshot__175__8x8Vadbd6.png?ik-sdk-version=javascript-1.4.3&updatedAt=1663172192657' alt='screenshots of api in action' />
